@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_task_manager/router/router.dart';
+import 'package:flutter_task_manager/utils/theme.dart';
 
 class TaskManagerApplication extends ConsumerWidget {
   const TaskManagerApplication({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello, World!'),
-        ),
-      ),
+    return MaterialApp.router(
+      localizationsDelegates: const [
+      ],
+      routerConfig: goRouter,
+      locale: const Locale.fromSubtags(languageCode: 'en'),
+      title: 'LoveMemo',
+      themeMode: ThemeMode.light,
+      theme: ThemeUtils.getInstance.lightTheme,
     );
   }
 }
