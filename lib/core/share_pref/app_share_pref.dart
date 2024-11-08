@@ -24,4 +24,6 @@ abstract class AppSharePreference {
   Future<List<String>?> getListString({required AppSharePrefKey key});
 
   Future<bool> clear();
+
+  Object? getNotAsync(String key);
 }

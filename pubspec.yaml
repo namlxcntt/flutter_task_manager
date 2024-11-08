@@ -27,11 +27,12 @@ dependencies:
   gap: ^3.0.1
   intl: ^0.19.0
   flutter_localization: ^0.2.2
+  freezed_annotation: ^2.4.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  retrofit_generator: '>=8.0.0 <10.0.0' # for Dart 3.3 use ^9.0.0
   flutter_lints: ^4.0.0
   riverpod_generator: ^2.6.2
   build_runner: ^2.4.13
@@ -39,7 +40,7 @@ dev_dependencies:
   riverpod_lint: ^2.6.2
   flutter_gen_runner:
   freezed: ^2.5.7
-
+  json_serializable: ^6.0.0
 flutter_gen:
   output: lib/generated/ # Optional (default: lib/gen/)
   line_length: 80 # Optional (default: 80)

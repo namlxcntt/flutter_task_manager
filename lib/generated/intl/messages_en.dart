@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "textContinue": MessageLookupByLibrary.simpleMessage("Continue"),
         "whatsYourEmail":
             MessageLookupByLibrary.simpleMessage("What\'s your email?"),
-        "yourEmail": MessageLookupByLibrary.simpleMessage("Your Email")
+        "yourEmail": MessageLookupByLibrary.simpleMessage("Your Email"),
+        "yourPassword": MessageLookupByLibrary.simpleMessage("Your Password")
       };
 }

@@ -67,4 +67,10 @@ class AppSharePrefImpl extends AppSharePreference {
   Future<bool> clear() async {
     return _sharedPreferences.clear();
   }
+
+  @override
+  Object? getNotAsync(String key) {
+       _sharedPreferences.get(key);
+    return null;
+  }
 }
