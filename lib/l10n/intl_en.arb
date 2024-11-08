@@ -1,0 +1,9 @@
+{
+  "createAccount": "Create an Account",
+  "logIn": "Log In",
+  "whatsYourEmail": "What's your email?",
+  "yourEmail": "Your Email",
+  "email" : "Email",
+  "textContinue": "Continue",
+  "password": "Password"
+}

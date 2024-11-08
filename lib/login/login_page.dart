@@ -18,11 +18,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            pinned: true,
             actions: [
               TextButton(
                 onPressed: () {},
                 child: Text(
-                  'Create an Account',
+                  context.getLocaleDelegate().createAccount,
                   style: context.bodyMedium()?.copyWith(
                         decoration: TextDecoration.underline,
                         decorationColor: Palette.textColorSecondary,
@@ -38,26 +39,43 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Log In',
+                    context.getLocaleDelegate().logIn,
                     style: context.headlineLarge(),
                   ),
                   AppSize.size8.gap(),
                   Text(
-                    'What' 's your email?',
-                    style: context.labelMedium()?.copyWith(color: Palette.textColorSecondary, fontSize: AppSize.size16),
+                    context.getLocaleDelegate().whatsYourEmail,
+                    style: context.labelMedium()?.copyWith(
+                        color: Palette.textColorSecondary,
+                        fontSize: AppSize.size16),
                   ),
                   AppSize.size32.gap(),
-                  Text('Your Email',
+                  Text(context.getLocaleDelegate().yourEmail,
                       style: context.labelLarge()?.copyWith(
                             color: Palette.textColorSecondary,
                           )),
                   AppSize.size8.gap(),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'Email',
+                      hintText: context.getLocaleDelegate().email,
+                      hintStyle: context.getTextTheme().labelSmall,
                       labelStyle: context.labelLarge(),
                       border: const UnderlineInputBorder(),
                     ),
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  AppSize.size16.gap(),
+                  TextField(
+                    obscureText: true,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      hintText: context.getLocaleDelegate().password,
+                      hintStyle: context.getTextTheme().labelSmall,
+                      labelStyle: context.labelLarge(),
+                      border: const UnderlineInputBorder(),
+                    ),
+                    textInputAction: TextInputAction.done,
                   ),
                   AppSize.size56.gap(),
                   SizedBox(
@@ -65,17 +83,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Palette.primaryColor,
+                        backgroundColor: Colors.blue, // Background color
+                        surfaceTintColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppSize.size14),
+                          borderRadius:
+                          BorderRadius.circular(AppSize.size14),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: AppSize.size18),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: AppSize.size18),
                       ),
                       child: Text(
-                        'Continue',
+                        context.getLocaleDelegate().textContinue,
                         style: context.headlineSmall()?.copyWith(
-                              color: Colors.white,
-                            ),
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   )

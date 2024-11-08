@@ -29,3 +29,5 @@ misc.xml
 *.iml
 *.log
 .idea/
+**.g.dart
+**.freezed.dart

@@ -25,6 +25,8 @@ dependencies:
   go_router: ^14.4.1
   json_annotation: ^4.9.0
   gap: ^3.0.1
+  intl: ^0.19.0
+  flutter_localization: ^0.2.2
 
 dev_dependencies:
   flutter_test:
@@ -36,9 +38,10 @@ dev_dependencies:
   custom_lint: ^0.7.0
   riverpod_lint: ^2.6.2
   flutter_gen_runner:
+  freezed: ^2.5.7
 
 flutter_gen:
-  output: lib/gen/ # Optional (default: lib/gen/)
+  output: lib/generated/ # Optional (default: lib/gen/)
   line_length: 80 # Optional (default: 80)
 
   # Optional
@@ -53,5 +56,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/fonts/
-
+flutter_intl:
+  enabled: true
 

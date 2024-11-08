@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_task_manager/gen/assets.gen.dart';
+import 'package:flutter_task_manager/generated/assets.gen.dart';
 import 'package:flutter_task_manager/utils/app_size.dart';
 
 class Palette {

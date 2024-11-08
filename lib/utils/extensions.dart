@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task_manager/generated/l10n.dart';
 import 'package:gap/gap.dart';
 
 extension ContextExt on BuildContext {
+  S getLocaleDelegate() {
+    return S.of(this);
+  }
 
   TextTheme getTextTheme() {
     return Theme.of(this).textTheme;
