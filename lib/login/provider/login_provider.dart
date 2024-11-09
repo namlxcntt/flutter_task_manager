@@ -1,10 +1,20 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/core/network/provider/network_provider.dart';
 import 'package:flutter_task_manager/core/network/request/login_request.dart';
 import 'package:flutter_task_manager/login/provider/login_state.dart';
+import 'package:flutter_task_manager/login/usecase/login_usecase.dart';
 import 'package:flutter_task_manager/utils/logger.dart';
+import 'package:flutter_task_manager/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'login_provider.g.dart';
+
+@riverpod
+LoginUseCase loginUseCase(Ref ref) {
+  final appSharePref = ref.read(appSharePrefProvider);
+  final apiClient = ref.read(apiClientPrefProvider);
+  return LoginUseCase(apiClient, appSharePref);
+}
 
 @riverpod
 class LoginController extends _$LoginController {
@@ -17,10 +27,28 @@ class LoginController extends _$LoginController {
     state = AsyncData(loginState);
   }
 
-  void login() async {
-    var loginRequest = LoginRequest(email: "namlxcntt@gmail.com", password: "Abcd@1234");
-    var apiClient = ref.read(apiClientPrefProvider);
-    final loginResponse = await apiClient.login(loginRequest);
-    LogUtils.getInstance.d("loginResponse $loginResponse");
+  void login({String? email, String? password}) async {
+    if (email == null || email.isEmpty) {
+      updateState(const LoginState.error('Email is required', ErrorType.EMAIL));
+      return;
+    }
+
+    if (password == null || password.isEmpty) {
+      updateState(
+          const LoginState.error('Password is required', ErrorType.PASSWORD));
+      return;
+    }
+    if (AppUtils.isValidEmail(email) == false) {
+      updateState(const LoginState.error('Email is valid ', ErrorType.EMAIL));
+      return;
+    }
+    if (password.length < 6) {
+      updateState(const LoginState.error('Password must be at least 6 characters', ErrorType.PASSWORD));
+      return;
+    }
+    state = const AsyncLoading();
+    var loginRequest = LoginRequest(email: email, password: password);
+    var apiClient = await ref.read(loginUseCaseProvider).execute(loginRequest);
+    updateState(apiClient);
   }
 }

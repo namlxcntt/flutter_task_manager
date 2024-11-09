@@ -4,7 +4,6 @@ import 'package:flutter_task_manager/core/share_pref/app_share_pref.dart';
 import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dio/dio.dart';
-
 part 'network_provider.g.dart';
 
 @Riverpod(keepAlive: true)
@@ -30,6 +29,9 @@ Dio dioPref(Ref ref) {
           options.receiveTimeout = const Duration(minutes: 3);
           if (bearToken != null) options.headers['Authorization'] = 'Bearer $bearToken';
           handler.next(options);
+        },
+        onError: (error, handler) {
+          handler.next(error);
         },
       ),
     )
