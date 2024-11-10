@@ -2,9 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/core/network/provider/network_provider.dart';
 import 'package:flutter_task_manager/core/network/request/login_request.dart';
 import 'package:flutter_task_manager/core/share_pref/app_share_pref.dart';
-import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
-import 'package:flutter_task_manager/login/provider/login_state.dart';
-import 'package:flutter_task_manager/login/usecase/login_usecase.dart';
+import 'package:flutter_task_manager/features/login/provider/login_state.dart';
+import 'package:flutter_task_manager/features/login/usecase/login_usecase.dart';
 import 'package:flutter_task_manager/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

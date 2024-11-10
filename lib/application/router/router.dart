@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_task_manager/account/account_page.dart';
 import 'package:flutter_task_manager/core/network/provider/network_provider.dart';
-import 'package:flutter_task_manager/core/share_pref/app_share_pref.dart';
 import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
-import 'package:flutter_task_manager/login/login_page.dart';
-import 'package:flutter_task_manager/main/dashboard_page_with_nested_router.dart';
-import 'package:flutter_task_manager/task_list/task_list_page.dart';
-import 'package:flutter_task_manager/tasks/task_page.dart';
+import 'package:flutter_task_manager/features/account/account_page.dart';
+import 'package:flutter_task_manager/features/login/login_page.dart';
+import 'package:flutter_task_manager/features/main/dashboard_page_with_nested_router.dart';
+import 'package:flutter_task_manager/features/task_list/task_list_page.dart';
+import 'package:flutter_task_manager/features/tasks/task_page.dart';
+import 'package:flutter_task_manager/utils/constant.dart';
 import 'package:flutter_task_manager/utils/extensions.dart';
 import 'package:flutter_task_manager/utils/logger.dart';
 import 'package:go_router/go_router.dart';
@@ -44,13 +44,13 @@ final goRouter = GoRouter(
         ?.isNotNullOrEmpty();
 
     final currentPath = state.fullPath;
-    if (currentPath == null || currentPath  == '/') {
+    if (currentPath == null || currentPath == '/') {
       if (loggedIn == true) {
         LogUtils.getInstance.d('Hello');
         return AppRoute.taskPage.getPath();
       } else {
         LogUtils.getInstance.d('Hello');
-        return AppRoute.loginPage.getPath();
+        return AppConstant.forwardSlash;
       }
     }
     return null;
@@ -104,10 +104,10 @@ final goRouter = GoRouter(
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
-      path: '/',
+      path: AppConstant.forwardSlash,
       name: AppRoute.loginPage.name,
       pageBuilder: (context, state) {
-        return const MaterialPage(
+        return const CupertinoPage(
           child: LoginPage(),
         );
       },

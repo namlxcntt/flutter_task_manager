@@ -7,7 +7,7 @@ import 'package:flutter_task_manager/core/share_pref/app_share_pref.dart';
 import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
 import 'package:flutter_task_manager/core/use_case/extensions.dart';
 import 'package:flutter_task_manager/core/use_case/use_case.dart';
-import 'package:flutter_task_manager/login/provider/login_state.dart';
+import 'package:flutter_task_manager/features/login/provider/login_state.dart';
 import 'package:flutter_task_manager/utils/extensions.dart';
 
 class LoginUseCase extends UseCase<LoginRequest, LoginState> {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/application/router/router.dart';
-import 'package:flutter_task_manager/login/provider/login_provider.dart';
-import 'package:flutter_task_manager/login/provider/login_state.dart';
+import 'package:flutter_task_manager/features/login/provider/login_provider.dart';
+import 'package:flutter_task_manager/features/login/provider/login_state.dart';
 import 'package:flutter_task_manager/utils/app_size.dart';
 import 'package:flutter_task_manager/utils/extensions.dart';
 import 'package:flutter_task_manager/utils/logger.dart';
@@ -172,13 +172,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             password: _passwordController.text);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue, // Background color
+                        backgroundColor: Colors.indigoAccent, // Background color
                         surfaceTintColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppSize.size14),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: AppSize.size18),
+                            vertical: AppSize.size20),
                       ),
                       child: Text(
                         context.getLocaleDelegate().textContinue,

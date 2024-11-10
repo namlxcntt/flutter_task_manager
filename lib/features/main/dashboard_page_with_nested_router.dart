@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_task_manager/main/provider/current_index_provider.dart';
+import 'package:flutter_task_manager/features/main/provider/current_index_provider.dart';
+import 'package:flutter_task_manager/generated/assets.gen.dart';
 import 'package:flutter_task_manager/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 
@@ -46,8 +47,8 @@ class _ScaffoldWithNestedNavigationState
             highlightColor: Colors.transparent,
           ),
           child: BottomNavigationBar(
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Task'),
+              items:  [
+                // BottomNavigationBarItem(icon: Assets.sv, label: 'Task'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.list), label: 'Task List'),
                 BottomNavigationBarItem(
