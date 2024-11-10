@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/login/provider/login_provider.dart';
+import 'package:flutter_task_manager/login/provider/login_state.dart';
 import 'package:flutter_task_manager/utils/app_size.dart';
 import 'package:flutter_task_manager/utils/extensions.dart';
+import 'package:flutter_task_manager/utils/logger.dart';
 import 'package:flutter_task_manager/utils/theme.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -13,8 +15,47 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
+  late final TextEditingController _emailController = TextEditingController();
+  late final TextEditingController _passwordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Dialog(
+          backgroundColor: Colors.transparent,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+  }
+  void hideLoadingDialog(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(loginControllerProvider, (prev, next) {
+      LogUtils.getInstance.d('prev: $prev, next: $next');
+      if(next is AsyncLoading) {
+        showLoadingDialog(context);
+      }
+      if (next is AsyncData && next.value is LoginStateSuccess) {
+        hideLoadingDialog(context);
+        // context.pushReplacement();
+      }
+    });
     return Scaffold(
       backgroundColor: context.getColorScheme().onSurface,
       body: CustomScrollView(
@@ -61,50 +102,76 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             color: Palette.textColorSecondary,
                           )),
                   AppSize.size8.gap(),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: context.getLocaleDelegate().email,
-                      hintStyle: context.getTextTheme().labelSmall?.copyWith(
-                        color: Palette.textColorSecondary
+                  Consumer(builder: (context, ref, child) {
+                    String? textError;
+                    var state = ref.watch(loginControllerProvider).asData;
+                    if (state != null &&
+                        state.value is LoginStateError &&
+                        (state.value as LoginStateError).errorType == ErrorLoginType.EMAIL) {
+                      textError = (state.value as LoginStateError).message;
+                    }
+                    return TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        hintText: context.getLocaleDelegate().email,
+                        hintStyle: context
+                            .getTextTheme()
+                            .labelSmall
+                            ?.copyWith(color: Palette.textColorSecondary),
+                        labelStyle: context.labelLarge(),
+                        border: const UnderlineInputBorder(),
+                        errorText: textError,
                       ),
-                      labelStyle: context.labelLarge(),
-                      border: const UnderlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                  ),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                    );
+                  }),
                   AppSize.size16.gap(),
                   Text(context.getLocaleDelegate().yourPassword,
                       style: context.labelLarge()?.copyWith(
-                        color: Palette.textColorSecondary,
-                      )),
+                            color: Palette.textColorSecondary,
+                          )),
                   AppSize.size8.gap(),
-                  TextField(
-                    obscureText: true,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      hintText: context.getLocaleDelegate().password,
-                      hintStyle: context.getTextTheme().labelSmall?.copyWith(
-                          color: Palette.textColorSecondary
+                  Consumer(builder: (context, ref, child) {
+                    String? textError;
+                    var state = ref.watch(loginControllerProvider).asData;
+                    if (state != null &&
+                        state.value is LoginStateError &&
+                        (state.value as LoginStateError).errorType ==
+                            ErrorLoginType.PASSWORD) {
+                      textError = (state.value as LoginStateError).message;
+                    }
+                    return TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        errorText: textError,
+                        hintText: context.getLocaleDelegate().password,
+                        hintStyle: context
+                            .getTextTheme()
+                            .labelSmall
+                            ?.copyWith(color: Palette.textColorSecondary),
+                        labelStyle: context.labelLarge(),
+                        border: const UnderlineInputBorder(),
                       ),
-                      labelStyle: context.labelLarge(),
-                      border: const UnderlineInputBorder(),
-                    ),
-                    textInputAction: TextInputAction.done,
-                  ),
+                      textInputAction: TextInputAction.done,
+                    );
+                  }),
                   AppSize.size56.gap(),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        ref.read(loginControllerProvider.notifier).login();
+                        ref.read(loginControllerProvider.notifier).login(
+                            email: _emailController.text,
+                            password: _passwordController.text);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue, // Background color
                         surfaceTintColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(AppSize.size14),
+                          borderRadius: BorderRadius.circular(AppSize.size14),
                         ),
                         padding: const EdgeInsets.symmetric(
                             vertical: AppSize.size18),
@@ -112,8 +179,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       child: Text(
                         context.getLocaleDelegate().textContinue,
                         style: context.headlineSmall()?.copyWith(
-                          color: Colors.white,
-                        ),
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   )

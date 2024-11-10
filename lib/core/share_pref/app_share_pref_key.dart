@@ -1,6 +1,7 @@
 /// Define Key
 enum AppSharePrefKey {
   tokenUser,
+  refreshToken,
   localeManager,
   stateWidget
 }

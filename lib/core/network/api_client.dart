@@ -10,10 +10,12 @@ part 'api_client.g.dart';
 abstract class ApiClient {
   static const String baseURL ="http://localhost:8080/";
   static const String apiLogin = "api/public/login";
-
+  static const String apiRefreshToken = "api/public/refreshToken";
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
 
   @POST(apiLogin)
   Future<ResponseWrapper<LoginResponse>> login(@Body()LoginRequest loginRequest);
-
+  
+  @POST(apiRefreshToken)
+  Future<ResponseWrapper<LoginResponse>> refreshToken(@Body() String refreshToken);
 }
