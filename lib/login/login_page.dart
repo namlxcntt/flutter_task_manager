@@ -107,7 +107,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     var state = ref.watch(loginControllerProvider).asData;
                     if (state != null &&
                         state.value is LoginStateError &&
-                        (state.value as LoginStateError).errorType == ErrorType.EMAIL) {
+                        (state.value as LoginStateError).errorType == ErrorLoginType.EMAIL) {
                       textError = (state.value as LoginStateError).message;
                     }
                     return TextField(
@@ -138,7 +138,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     if (state != null &&
                         state.value is LoginStateError &&
                         (state.value as LoginStateError).errorType ==
-                            ErrorType.PASSWORD) {
+                            ErrorLoginType.PASSWORD) {
                       textError = (state.value as LoginStateError).message;
                     }
                     return TextField(

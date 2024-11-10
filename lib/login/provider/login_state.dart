@@ -6,11 +6,11 @@ abstract class LoginState with _$LoginState {
   const factory LoginState.email() = LoginStateEmail;
   const factory LoginState.password() = LoginStatePassword;
   const factory LoginState.success( ) = LoginStateSuccess;
-  const factory LoginState.error(String message,ErrorType errorType) = LoginStateError;
+  const factory LoginState.error(String message,ErrorLoginType errorType) = LoginStateError;
 }
 
-enum ErrorType {
+enum ErrorLoginType {
   EMAIL,
   PASSWORD,
-  UNKNOW
+  NOTHING
 }

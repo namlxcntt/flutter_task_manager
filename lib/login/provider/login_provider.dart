@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/core/network/provider/network_provider.dart';
 import 'package:flutter_task_manager/core/network/request/login_request.dart';
+import 'package:flutter_task_manager/core/share_pref/app_share_pref.dart';
+import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
 import 'package:flutter_task_manager/login/provider/login_state.dart';
 import 'package:flutter_task_manager/login/usecase/login_usecase.dart';
 import 'package:flutter_task_manager/utils/logger.dart';
@@ -27,28 +29,39 @@ class LoginController extends _$LoginController {
     state = AsyncData(loginState);
   }
 
+  AppSharePreference _appSharePreference() {
+    return ref.read(appSharePrefProvider);
+  }
+
   void login({String? email, String? password}) async {
     if (email == null || email.isEmpty) {
-      updateState(const LoginState.error('Email is required', ErrorType.EMAIL));
+      updateState(const LoginState.error('Email is required', ErrorLoginType.EMAIL));
       return;
     }
 
     if (password == null || password.isEmpty) {
       updateState(
-          const LoginState.error('Password is required', ErrorType.PASSWORD));
+          const LoginState.error('Password is required', ErrorLoginType.PASSWORD));
       return;
     }
     if (AppUtils.isValidEmail(email) == false) {
-      updateState(const LoginState.error('Email is valid ', ErrorType.EMAIL));
+      updateState(const LoginState.error('Email is valid ', ErrorLoginType.EMAIL));
       return;
     }
     if (password.length < 6) {
-      updateState(const LoginState.error('Password must be at least 6 characters', ErrorType.PASSWORD));
+      updateState(const LoginState.error(
+          'Password must be at least 6 characters', ErrorLoginType.PASSWORD));
       return;
     }
     state = const AsyncLoading();
     var loginRequest = LoginRequest(email: email, password: password);
     var apiClient = await ref.read(loginUseCaseProvider).execute(loginRequest);
+    if (apiClient != null) {
+      // _appSharePreference().saveString(key:AppSharePrefKey.tokenUser,value: token);
+      updateState(const LoginState.success());
+    } else {
+      updateState(const LoginState.error('Login failed', ErrorLoginType.EMAIL));
+    }
     updateState(apiClient);
   }
 }
