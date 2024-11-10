@@ -14,7 +14,9 @@ class LogUtils {
         // Colorful log messages
         printEmojis: true,
         // Print an emoji for each log message
-        printTime: false // Should each log print contain a timestamp
+        dateTimeFormat: (date) {
+          return date.toIso8601String();
+        } // Should each log print contain a timestamp
         ),
   );
 

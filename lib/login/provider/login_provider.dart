@@ -5,7 +5,6 @@ import 'package:flutter_task_manager/core/share_pref/app_share_pref.dart';
 import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
 import 'package:flutter_task_manager/login/provider/login_state.dart';
 import 'package:flutter_task_manager/login/usecase/login_usecase.dart';
-import 'package:flutter_task_manager/utils/logger.dart';
 import 'package:flutter_task_manager/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -35,17 +34,19 @@ class LoginController extends _$LoginController {
 
   void login({String? email, String? password}) async {
     if (email == null || email.isEmpty) {
-      updateState(const LoginState.error('Email is required', ErrorLoginType.EMAIL));
+      updateState(
+          const LoginState.error('Email is required', ErrorLoginType.EMAIL));
       return;
     }
 
     if (password == null || password.isEmpty) {
-      updateState(
-          const LoginState.error('Password is required', ErrorLoginType.PASSWORD));
+      updateState(const LoginState.error(
+          'Password is required', ErrorLoginType.PASSWORD));
       return;
     }
     if (AppUtils.isValidEmail(email) == false) {
-      updateState(const LoginState.error('Email is valid ', ErrorLoginType.EMAIL));
+      updateState(
+          const LoginState.error('Email is valid ', ErrorLoginType.EMAIL));
       return;
     }
     if (password.length < 6) {
@@ -56,12 +57,6 @@ class LoginController extends _$LoginController {
     state = const AsyncLoading();
     var loginRequest = LoginRequest(email: email, password: password);
     var apiClient = await ref.read(loginUseCaseProvider).execute(loginRequest);
-    if (apiClient != null) {
-      // _appSharePreference().saveString(key:AppSharePrefKey.tokenUser,value: token);
-      updateState(const LoginState.success());
-    } else {
-      updateState(const LoginState.error('Login failed', ErrorLoginType.EMAIL));
-    }
     updateState(apiClient);
   }
 }

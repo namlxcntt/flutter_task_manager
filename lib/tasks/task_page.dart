@@ -11,6 +11,10 @@ class TaskPage extends ConsumerStatefulWidget {
 class _TaskPageState extends ConsumerState<TaskPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Scaffold(
+      body: Center(
+        child: Text('Task Pages'),
+      ),
+    );
   }
 }
