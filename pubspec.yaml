@@ -29,6 +29,7 @@ dependencies:
   flutter_localization: ^0.2.2
   freezed_annotation: ^2.4.4
   dio: ^5.1.1
+  flutter_svg: ^2.0.14
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +43,8 @@ dev_dependencies:
   flutter_gen_runner:
   freezed: ^2.5.7
   json_serializable: ^6.0.0
+
+
 flutter_gen:
   output: lib/generated/ # Optional (default: lib/gen/)
   line_length: 80 # Optional (default: 80)
