@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/account/account_page.dart';
+import 'package:flutter_task_manager/core/network/provider/network_provider.dart';
+import 'package:flutter_task_manager/core/share_pref/app_share_pref.dart';
+import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
 import 'package:flutter_task_manager/login/login_page.dart';
 import 'package:flutter_task_manager/main/dashboard_page_with_nested_router.dart';
 import 'package:flutter_task_manager/task_list/task_list_page.dart';
 import 'package:flutter_task_manager/tasks/task_page.dart';
+import 'package:flutter_task_manager/utils/extensions.dart';
+import 'package:flutter_task_manager/utils/logger.dart';
 import 'package:go_router/go_router.dart';
 
 enum AppRoute {
@@ -19,22 +25,45 @@ enum AppRoute {
 
 final _homeGlobalKey = GlobalKey();
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorKeyTaskPage = GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorTaskPage');
-final _shellNavigatorKeyTaskListPage = GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorTaskListPage');
-final _shellNavigatorKeyAccountPage = GlobalKey<NavigatorState>(debugLabel: 'eshellNavigatorKeyAccountPage');
+final _shellNavigatorKeyTaskPage =
+    GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorTaskPage');
+final _shellNavigatorKeyTaskListPage =
+    GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorTaskListPage');
+final _shellNavigatorKeyAccountPage =
+    GlobalKey<NavigatorState>(debugLabel: 'eshellNavigatorKeyAccountPage');
 
 final goRouter = GoRouter(
   initialLocation: '/',
   navigatorKey: _rootNavigatorKey,
+  redirect: (context, state) {
+    // Check auth and redirect path
+    final container = ProviderScope.containerOf(context);
+    final appSharePreference = container.read(appSharePrefProvider);
+    final bool? loggedIn = appSharePreference
+        .getString(key: AppSharePrefKey.tokenUser)
+        ?.isNotNullOrEmpty();
+
+    final currentPath = state.fullPath;
+    if (currentPath == null || currentPath  == '/') {
+      if (loggedIn == true) {
+        LogUtils.getInstance.d('Hello');
+        return AppRoute.taskPage.getPath();
+      } else {
+        LogUtils.getInstance.d('Hello');
+        return AppRoute.loginPage.getPath();
+      }
+    }
+    return null;
+  },
   routes: [
     StatefulShellRoute.indexedStack(
       parentNavigatorKey: _rootNavigatorKey,
       pageBuilder: (context, state, navigationShell) {
         return NoTransitionPage(
-            child: DashBoardWithNestedNavigation(key: _homeGlobalKey, navigationShell: navigationShell));
+            child: DashBoardWithNestedNavigation(
+                key: _homeGlobalKey, navigationShell: navigationShell));
       },
       branches: [
-        // Shell branch Home
         StatefulShellBranch(
           navigatorKey: _shellNavigatorKeyTaskPage,
           routes: [

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_task_manager/application/router/router.dart';
 import 'package:flutter_task_manager/login/provider/login_provider.dart';
 import 'package:flutter_task_manager/login/provider/login_state.dart';
 import 'package:flutter_task_manager/utils/app_size.dart';
 import 'package:flutter_task_manager/utils/extensions.dart';
 import 'package:flutter_task_manager/utils/logger.dart';
 import 'package:flutter_task_manager/utils/theme.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -40,6 +42,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       },
     );
   }
+
   void hideLoadingDialog(BuildContext context) {
     Navigator.of(context).pop();
   }
@@ -48,12 +51,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     ref.listen(loginControllerProvider, (prev, next) {
       LogUtils.getInstance.d('prev: $prev, next: $next');
-      if(next is AsyncLoading) {
+      if (next is AsyncLoading) {
         showLoadingDialog(context);
       }
       if (next is AsyncData && next.value is LoginStateSuccess) {
         hideLoadingDialog(context);
-        // context.pushReplacement();
+        context.pushReplacement(AppRoute.taskPage.getPath());
       }
     });
     return Scaffold(
@@ -107,7 +110,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     var state = ref.watch(loginControllerProvider).asData;
                     if (state != null &&
                         state.value is LoginStateError &&
-                        (state.value as LoginStateError).errorType == ErrorLoginType.EMAIL) {
+                        (state.value as LoginStateError).errorType ==
+                            ErrorLoginType.EMAIL) {
                       textError = (state.value as LoginStateError).message;
                     }
                     return TextField(

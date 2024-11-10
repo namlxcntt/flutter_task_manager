@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_task_manager/generated/l10n.dart';
+import 'package:flutter_task_manager/utils/constant.dart';
 import 'package:gap/gap.dart';
 
 extension ContextExt on BuildContext {
@@ -62,5 +63,19 @@ extension PaddingExt on double {
 
   Gap gap() {
     return Gap(this);
+  }
+}
+
+extension StringExt on String? {
+  String ifNullOrEmpty() {
+    return this.isNotNullOrEmpty() ? this! : AppConstant.emptyString;
+  }
+
+  bool isNullOrEmpty() {
+    return this == null || this!.isEmpty;
+  }
+
+  bool isNotNullOrEmpty() {
+    return this != null && this!.isNotEmpty;
   }
 }
