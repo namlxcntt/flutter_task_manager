@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/core/network/provider/network_provider.dart';
 import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
@@ -70,7 +71,7 @@ final goRouter = GoRouter(
             GoRoute(
               path: AppRoute.taskPage.getPath(),
               name: AppRoute.taskPage.name,
-              pageBuilder: (context, state) => const NoTransitionPage(
+              pageBuilder: (context, state) => const MaterialPage(
                 child: TaskPage(),
               ),
             ),

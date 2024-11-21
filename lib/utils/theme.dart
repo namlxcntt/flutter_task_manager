@@ -12,9 +12,17 @@ class Palette {
   static const statusColorSuccess = Color(0xFF64C94A);
   static const statusColorError = Color(0xFFFA5F5F);
   static const statusColorDisable = Color(0xFFD6D4D4);
-  static const textColorSecondary = Color(0xFFA6A6A6);
+  static const textColorSecondary = Color(0xFF7F7F7F);
   static const textColorPrimary = Color(0xFF281616);
   static const backgroundColorBasic = Colors.white;
+  static const violetGradient = LinearGradient(
+    colors: [
+      Color(0xFF8B78FF),
+      Color(0xFF5451D6),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }
 
 class ThemeUtils {

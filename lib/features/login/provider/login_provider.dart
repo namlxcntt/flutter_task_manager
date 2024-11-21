@@ -27,9 +27,6 @@ class LoginController extends _$LoginController {
     state = AsyncData(loginState);
   }
 
-  AppSharePreference _appSharePreference() {
-    return ref.read(appSharePrefProvider);
-  }
 
   void login({String? email, String? password}) async {
     if (email == null || email.isEmpty) {

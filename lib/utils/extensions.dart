@@ -68,7 +68,7 @@ extension PaddingExt on double {
 
 extension StringExt on String? {
   String ifNullOrEmpty() {
-    return this.isNotNullOrEmpty() ? this! : AppConstant.emptyString;
+    return isNotNullOrEmpty() ? this! : AppConstant.emptyString;
   }
 
   bool isNullOrEmpty() {

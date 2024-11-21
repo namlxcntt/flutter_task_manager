@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/core/network/api_client.dart';
-import 'package:flutter_task_manager/core/network/request/login_request.dart';
+import 'package:flutter_task_manager/core/network/request/refresh_token_request.dart';
 import 'package:flutter_task_manager/core/share_pref/app_share_pref.dart';
 import 'package:flutter_task_manager/core/share_pref/app_share_pref_key.dart';
+import 'package:flutter_task_manager/utils/extensions.dart';
 import 'package:flutter_task_manager/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dio/dio.dart';
@@ -22,21 +23,28 @@ ApiClient apiClientPref(Ref ref) {
 
 @Riverpod(keepAlive: true)
 Dio dioPref(Ref ref) {
+  bool isRefreshing = false;
+
   final appSharePref = ref.read(appSharePrefProvider);
-  var bearToken = appSharePref.getString(key: AppSharePrefKey.tokenUser);
 
   Future<void> refreshToken() async {
-    final apiClient = ref.read(apiClientPrefProvider);
-    final refreshToken =
-        appSharePref.getString(key: AppSharePrefKey.refreshToken) ?? '';
-    final apiResponse = await apiClient.refreshToken(refreshToken);
-    if (apiResponse.status == 200 && apiResponse.data != null) {
-      await appSharePref.saveString(
-          key: AppSharePrefKey.tokenUser,
-          value: apiResponse.data!.bearToken ?? '');
-      await appSharePref.saveString(
-          key: AppSharePrefKey.refreshToken,
-          value: apiResponse.data!.refreshToken ?? '');
+    {
+      if (isRefreshing == true) {
+        final apiClient = ref.read(apiClientPrefProvider);
+        final refreshToken =
+            appSharePref.getString(key: AppSharePrefKey.refreshToken) ?? '';
+        final apiResponse =
+            await apiClient.refreshToken(RefreshTokenRequest(refreshToken));
+        if (apiResponse.status == 0 && apiResponse.data != null) {
+          await appSharePref.saveString(
+              key: AppSharePrefKey.tokenUser,
+              value: apiResponse.data!.bearToken ?? '');
+          await appSharePref.saveString(
+              key: AppSharePrefKey.refreshToken,
+              value: apiResponse.data!.refreshToken ?? '');
+        }
+        isRefreshing = false;
+      }
     }
   }
 
@@ -47,14 +55,20 @@ Dio dioPref(Ref ref) {
         onRequest: (options, handler) async {
           options.connectTimeout = const Duration(minutes: 3);
           options.receiveTimeout = const Duration(minutes: 3);
+          var bearToken = appSharePref.getString(key: AppSharePrefKey.tokenUser);
           if (bearToken != null || bearToken?.isNotEmpty == true) {
             options.headers['Authorization'] = 'Bearer $bearToken';
           }
           handler.next(options);
         },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 403) {
+          final token = appSharePref.getString(key: AppSharePrefKey.refreshToken) ?? '';
+          if ((error.response?.statusCode == 403 ||
+                  error.response?.statusCode == 401) &&
+              token.isNotNullOrEmpty() &&
+              isRefreshing == false) {
             try {
+              isRefreshing = true;
               await refreshToken();
               final requestOptions = error.requestOptions;
               var newToken =
@@ -75,7 +89,7 @@ Dio dioPref(Ref ref) {
               return handler.reject(error);
             }
           } else {
-            return handler.next(error);
+            return handler.reject(error);
           }
         },
       ),

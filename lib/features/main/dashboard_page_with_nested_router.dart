@@ -20,10 +20,8 @@ class DashBoardWithNestedNavigation extends ConsumerStatefulWidget {
       _ScaffoldWithNestedNavigationState();
 }
 
-class _ScaffoldWithNestedNavigationState
-    extends ConsumerState<DashBoardWithNestedNavigation> {
+class _ScaffoldWithNestedNavigationState extends ConsumerState<DashBoardWithNestedNavigation> {
   void _goBranch(int index) {
-    LogUtils.getInstance.d('currentIndex: ${index}');
     widget.navigationShell.goBranch(
       index,
       initialLocation: index == widget.navigationShell.currentIndex,
